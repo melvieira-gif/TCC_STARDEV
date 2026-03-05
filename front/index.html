@@ -70,5 +70,34 @@
         <p class="paragrafo-footer">&copy 2026 StarDev. Todos os direitos reservados.</p>
     </footer>
 </body>
+
+<script>
+    //CONTATO
+    document.getElementById("btn_enviar").addEventListener("click", async () => {
+        const nome = document.getElementById("input_nome").value;
+        const email = document.getElementById("input_email").value;
+        const comentario = document.getElementById("input_comentario").value;
+        const resposta = await fetch("http://localhost:3000/contato", {     
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "nome": nome,
+                "email": email,
+                "comentario": comentario})
+        });
+        // terceira etapa - pegar a resposta do back-end
+        if(resposta.ok){
+            const dados = await resposta.json()
+            document.getElementById("resultadoFale").innerText = dados.resposta
+        }else{
+
+        }
+
+   });
+   </script>
+
 </html>
 

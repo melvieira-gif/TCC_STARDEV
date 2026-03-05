@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro - StarDev</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <figure class="logo">
+            <img src="logo.svg" alt="LOGOTIPO StarDev">
+        </figure>
+        <nav>
+            <a href="index.html">STARDEV</a>
+            <a href="cadastro.html">CADASTRA-SE</a>
+            <a href="login.html">LOGIN</a>
+        </nav>
+    </header>
+    <main>
+        <section id="login-container">
+                <figure>
+                    <img src="logoflu.svg" alt="LOGOTIPO STARDEV" class="logoflu">
+                </figure>
+        </section>
+
+        <section>
+            <h1 class="title"><strong>Cadastra-se</strong></h1
+                >
+
+            <br><br>
+
+            <label for="nome">Nome</label>
+            <br>
+            <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo">
+            <br>
+            <label for="email">E-mail</label>
+            <br>
+            <input type="email" id="email" name="email" placeholder="Digite seu e-mail favorito">
+            <br>
+            <label for="tel">Telefone</label>
+            <br>
+            <input type="text" id="telefone" name="telefone" placeholder="(00) 00000-0000" maxlength="15">
+            <br>
+            <label for="senha">Senha</label>
+            <br>
+            <input type="password" id="senha" name="senha" placeholder="Digite sua senha">
+            <br>
+            <button type="submit" class="button" id="btn_salvar_cadastro">Cadastrar</button>
+            <br>
+            <p>Já tem uma conta? <a href="login.html" target="_blank">Clique aqui</a></p>
+        </section>  
+    </main>
+    <footer>
+        <p><a href="index.html" target="_blank"><strong>StarDev</strong></a></p>
+        <p class="paragrafo-footer">&copy 2026 StarDev. Todos os direitos reservados.</p>
+    </footer>
+</body>
+
+<script>
+  //Criando evento ao clicar no botão de Cadastrar-se
+  const form = document.querySelector('form');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    console.log("Enviou os dados!")
+     //Req para o backend
+    try {
+        const dados = await resposta.json();
+        const feedback = document.getElementById("feedback");
+       //Limpa o meu card que estava antes
+        feedback.innerHTML = "";
+
+       //Em caso de erro no meu backend
+        if (!resposta.ok || dados.resposta?.toLowerCase().includes("erro") || dados.resposta?.toLowerCase().includes("insira") || dados.resposta?.toLowerCase().includes("deve")) {
+            feedback.innerHTML=`
+            <section id= "alert alert-danger" role="alert">
+            ${dados.resposta}
+            </section>
+            `;
+            return;  
+       }
+       //Caso de um success
+       feedback.innerHTML = `
+       <section id="alert alert-success" role="alert">
+         ${dados.resposta}
+       </section>
+       `;
+    }catch (error) {
+        console.log(error)
+        const feedback = document.getElementById("feedback");
+        feedback.innerHTML = `
+        <section id="alert alert-danger" role="alert">
+            Erro ao se conectar ao servidor.
+        </section>
+        `;
+    }
+   
+    document.getElementById("btn_salvar_cadastro").addEventListener("click", async ()=>{
+        // primeira etapa- pegar as informaçoes dos inputs
+        const nome = document.getElementById("nome").value
+        const email = document.getElementById("email").value
+        const senha = document.getElementById("senha").value
+        const dt_nasc = document.getElementById("dt_nasc").value
+
+        // segunda etapa- fazer a requisição para o back-end o que o thunder client não mostra oq faz
+        // fetch funciona pq vai passar o endereço da requisição
+        const resposta = await fetch (`http://localhost:3000/cadastro_login`,{
+            method:"POST",
+            headers:{
+                "Accept":"application/json",
+                "Content-Type":"application/json" // o tipo de conteudo que estou mandando é o JSON
+            },
+            body:JSON.stringify({
+                "nome":nome,
+                "email":email,
+                "senha":senha,
+                "dt_nasc":dt_nasc})
+        })
+        // terceira etapa - pegar a resposta do back-end
+        if(resposta.ok){
+            const dados = await resposta.json()
+            document.getElementById("resultado_cadastro").innerHTML = dados.resposta
+        }else{
+
+        }
+    })
+  });
+</script>
+
+</html>
