@@ -44,7 +44,7 @@
         <!--Formulário de feedback-->
         <section id="feedback">
             <h2> Nos dê seu feedback</h2>
-            <form>
+            
                 <fieldset>
                     <legend><b>Informações de contato</b></legend>
                     <label for="name">Nome: </label>
@@ -59,9 +59,9 @@
                     <br>
                     <textarea id="comentarios" placeholder="Digite seus comentários aqui"></textarea>
                     <br><br>
-                    <button class="btn btn-primary" onclick="alert('FEEDBACK ENVIADO')"><strong>Enviar feedback</strong></button>
+                    <button id="btn_enviar" class="btn btn-primary" ><strong>Enviar feedback</strong></button>
                 </fieldset>
-            </form>
+            
         </section>
     </main>
     <!--ADICIONAR DEPOIS O CANAL E REDES SOCIAIS NO FOOTER-->
@@ -74,10 +74,10 @@
 <script>
     //CONTATO
     document.getElementById("btn_enviar").addEventListener("click", async () => {
-        const nome = document.getElementById("input_nome").value;
-        const email = document.getElementById("input_email").value;
-        const comentario = document.getElementById("input_comentario").value;
-        const resposta = await fetch("http://localhost:3000/contato", {     
+        const nome = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const comentario = document.getElementById("comentarios").value;
+        const resposta = await fetch("http://10.111.9.133:3000/contato", {     
             method: "POST",
             headers: {
                 "Accept": "application/json",
@@ -92,6 +92,7 @@
         if(resposta.ok){
             const dados = await resposta.json()
             document.getElementById("resultadoFale").innerText = dados.resposta
+            alert("Feedback enviado !")
         }else{
 
         }

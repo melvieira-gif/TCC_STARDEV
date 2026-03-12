@@ -13,6 +13,9 @@ app.use(cors())
 app.post("/contato", async (req,res)=>{
     try {
 
+
+        console.log("CHegou na rota !")
+
         const{nome, email, comentario} = req.body
 
         if(comentario.length <10){
